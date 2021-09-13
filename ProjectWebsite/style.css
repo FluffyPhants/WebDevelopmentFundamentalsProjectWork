@@ -32,3 +32,11 @@ nav {
     height: 15em;
     width: auto;
 }
+
+.project {
+    padding: 2rem 2rem;
+}
+
+.projects .title, .projects .subtitle{
+    padding-left: 3rem;
+}
