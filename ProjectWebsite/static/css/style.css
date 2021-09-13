@@ -1,0 +1,48 @@
+.footer {
+  padding-bottom: 1rem;
+}
+
+#footer-hero {
+  margin-bottom: 3.5rem;
+}
+
+.footer-icons a img {
+  height: 3em;
+  width: 3em;
+  margin-right: 1em;
+}
+
+nav {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  padding-bottom: 0.6em;
+}
+
+.subtitle {
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-bottom: 1.2em;
+}
+
+.image img {
+  display: inline-block;
+  height: 15em;
+  width: auto;
+}
+
+.project {
+  padding: 2rem 2rem;
+}
+
+.projects .title,
+.projects .subtitle {
+  padding-left: 3rem;
+}
+
+.hero-foot {
+  font-weight: bold;
+  font-size: 1em;
+  margin-bottom: 5em;
+}
