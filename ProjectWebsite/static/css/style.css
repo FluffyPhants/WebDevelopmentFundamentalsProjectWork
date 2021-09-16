@@ -46,3 +46,11 @@ nav {
   font-size: 1em;
   margin-bottom: 5em;
 }
+
+.about-me {
+  height: 50%;
+}
+
+nav.pagination{
+  box-shadow: none;
+}
