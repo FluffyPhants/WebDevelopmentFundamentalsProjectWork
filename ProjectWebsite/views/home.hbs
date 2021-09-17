@@ -1,22 +1,23 @@
-
 <section class="hero is-success is-fullheight">
     <div class="hero-body">
         <div class="container has-text-centered">
             <p class="title">
-            The future of development is in students!
+                The future of development is in students!
             </p>
             <p class="subtitle">
-            Donec rhoncus aliquet tellus non dignissim. 
-            Fusce dictum, nisi ut fringilla consectetur, est velit ultricies nulla, sed lobortis nisi metus eu lorem. 
-            Proin malesuada faucibus metus id tristique. 
-            Pellentesque in tortor a velit porttitor aliquet. 
-            Nam fermentum, justo ac gravida aliquam, sem purus tincidunt diam, eget fermentum erat orci at diam. 
-            Nunc nec placerat justo. Vivamus sodales orci nec auctor blandit. 
-            Vivamus consequat orci in nisi tristique aliquet. 
-            Etiam dignissim scelerisque eros vitae accumsan. Aenean consectetur gravida libero, sed consequat libero accumsan in. 
-            Etiam congue, arcu vel consectetur mollis, nibh justo luctus erat, vitae ornare ante felis quis diam. 
-            Pellentesque blandit dolor eu ipsum laoreet molestie. 
-            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                Donec rhoncus aliquet tellus non dignissim.
+                Fusce dictum, nisi ut fringilla consectetur, est velit ultricies nulla, sed lobortis nisi metus eu
+                lorem.
+                Proin malesuada faucibus metus id tristique.
+                Pellentesque in tortor a velit porttitor aliquet.
+                Nam fermentum, justo ac gravida aliquam, sem purus tincidunt diam, eget fermentum erat orci at diam.
+                Nunc nec placerat justo. Vivamus sodales orci nec auctor blandit.
+                Vivamus consequat orci in nisi tristique aliquet.
+                Etiam dignissim scelerisque eros vitae accumsan. Aenean consectetur gravida libero, sed consequat libero
+                accumsan in.
+                Etiam congue, arcu vel consectetur mollis, nibh justo luctus erat, vitae ornare ante felis quis diam.
+                Pellentesque blandit dolor eu ipsum laoreet molestie.
+                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
             </p>
         </div>
     </div>
@@ -28,11 +29,42 @@
     <p class="title">Recent projects</p>
 
     <div class="columns">
+
+        {{#if recentProjects.length}}
+
+        {{#each recentProjects}}
         <div class="column">
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <img src="{{img}}" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-3">{{title}}</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p>{{subtitle}}</p>
+                    </div>
+                    <a href="/project/{{id}}" class="button">Learn more!</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+
+        {{else}}
+        <p>No projects have been posted yet!</p>
+        {{/if}}
+
+        {{!-- <div class="column">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -41,10 +73,10 @@
                             <p class="title is-3">John Smith</p>
                         </div>
                     </div>
-        
+
                     <div class="content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris.</p>
+                            Phasellus nec iaculis mauris.</p>
                     </div>
                     <a href="" class="button">Learn more!</a>
                 </div>
@@ -54,7 +86,7 @@
             <div class="card">
                 <div class="card-image">
                     <figure class="image">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
                     </figure>
                 </div>
                 <div class="card-content">
@@ -63,37 +95,15 @@
                             <p class="title is-3">John Smith</p>
                         </div>
                     </div>
-            
+
                     <div class="content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris.</p>
+                            Phasellus nec iaculis mauris.</p>
                     </div>
                     <a href="" class="button">Learn more!</a>
                 </div>
             </div>
-        </div>
-        <div class="column">
-            <div class="card">
-                <div class="card-image">
-                    <figure class="image">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="media">
-                        <div class="media-content">
-                            <p class="title is-3">John Smith</p>
-                        </div>
-                    </div>
-            
-                    <div class="content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Phasellus nec iaculis mauris.</p>
-                    </div>
-                    <a href="" class="button">Learn more!</a>
-                </div>
-            </div>
-        </div>
+        </div> --}}
     </div>
 
     <a href="" class="button is-success">View all my projects!</a>
