@@ -2,31 +2,36 @@
   <p class="title">Projects</p>
 </section>
 
-{{#if projects.length}}
+{{#if hasDatabaseError}}
+<p>Couldn't fetch the projects at the moment, try again later.</p>
+{{else}}
+  {{#if projects.length}}
 
-  {{#each projects}}
     <section class="projects">
-      <section class="project">
-        <div class="columns">
-          <div class="column">
-            <img src="{{img}}" alt="Placeholder image">
-          </div>
-          <div class="column">
-            <div class="has-tex-left-aligned">
-              <p class="title">{{title}}</p>
-              <p class="subtitle">{{subtitle}}</p>
+      {{#each projects}}
+          <section class="project">
+            <div class="columns">
+              <div class="column">
+                <img class="project-image" src="{{image1path}}" alt="Placeholder image">
+              </div>
+              <div class="column">
+                <div class="has-tex-left-aligned">
+                  <p class="title">{{projectName}}</p>
+                  <p class="subtitle">{{description1}}</p>
+                </div>
+                <div class="has-text-centered">
+                  <a href="/project/{{id}}/info" class="button">Learn more</a>
+                </div>
+              </div>
             </div>
-            <div class="has-text-centered">
-              <a href="/project/{{id}}" class="button">Learn more!</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    {{/each}}
+          </section>
+        {{/each}}
+    </section>
 
     {{else}}
       <p>No projects have been posted yet!</p>
   {{/if}}
+{{/if}}
 
 
 

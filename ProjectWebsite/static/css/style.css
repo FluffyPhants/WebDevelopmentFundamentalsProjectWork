@@ -41,6 +41,12 @@ nav {
   padding-left: 3rem;
 }
 
+.project-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 .hero-foot {
   font-weight: bold;
   font-size: 1em;
@@ -53,4 +59,101 @@ nav {
 
 nav.pagination{
   box-shadow: none;
+}
+
+.project-title {
+  padding-top: .7em;
+  padding-bottom: .7em;
+  margin-bottom: 0 !important;
+}
+
+.project-delete-title {
+  margin-top: 2em;
+  margin-bottom: 4em;
+  font-size: 2em;
+}
+
+hr {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.menu {
+  background-color: #48c78e;
+}
+
+.menu-list a{
+  text-align: right;
+}
+
+.menu-list a:hover {
+  background-color: #3abb81;
+}
+
+.menu-label {
+  text-align: right;
+}
+
+.comment-delete-link{
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.feedback-name {
+  margin-bottom: .5em;
+  margin-left: 1em;
+}
+
+.feedback-content {
+  margin-left: 2em;
+}
+
+.image-upload{
+  margin-top: 4em;
+}
+
+.file {
+  margin-top: 4em;
+  margin-bottom: 2em;
+}
+
+.updateImage-image {
+  max-width: 100%;
+}
+
+/* ######################################################################## */
+.button-toggle-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  font-size: 25px;
+  padding: 10px 20px;
+}
+
+.toggle-menu {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  height: 0;
+  width: 0;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+#toggle-menu:not(:checked) ~ aside.menu {
+  display: none;
 }

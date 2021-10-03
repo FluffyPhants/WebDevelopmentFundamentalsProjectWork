@@ -1,0 +1,56 @@
+<section class="section">
+    <form action="/project/{{project.id}}/update" method="POST" enctype="multipart/form-data">
+        <div class="field">
+            <label class="label">Project Title</label>
+            <div class="control">
+                <input class="input" type="text" name="projectTitle" value="{{project.projectName}}">
+            </div>
+        </div>
+
+        <div class="file is-boxed">
+            <section class="columns">
+                <section class="column">
+                    <p><strong>Current image:</strong></p>
+                    <img class="updateImage-image" src="{{project.image1path}}" alt="project image 1">
+                </section>
+                <section class="column has-text-centered">
+                    <p><strong>If you want to update the image simply select a new one below</strong></p>
+                    <input type="file" name="image1" value="fileupload" class="image-upload">
+                </section>
+            </section>
+        </div>
+
+        <div class="field">
+            <label class="label">image Description</label>
+            <div class="control">
+                <textarea class="textarea" rows="10" name="firstImageDescription" >{{project.description1}}</textarea>
+            </div>
+        </div>
+
+        <div class="file is-boxed">
+            <section class="columns">
+                <section class="column">
+                    <p><strong>Current image:</strong></p>
+                    <img class="updateImage-image" src="{{project.image2path}}" alt="project image 2">
+                </section>
+                <section class="column has-text-centered">
+                    <p><strong>If you want to update the image simply select a new one below</strong></p>
+                    <input type="file" name="image2" value="fileupload" class="image-upload">
+                </section>
+            </section>
+        </div>
+
+        <div class="field">
+            <label class="label">image Description</label>
+            <div class="control">
+                <textarea class="textarea" rows="10" name="secondImageDescription" placeholder="Textarea">{{project.description2}}</textarea>
+            </div>
+        </div>
+
+        <div class="field has-text-centered">
+            <div class="control">
+                <input type="submit" value="Post Project" class="button is-link"></input>
+            </div>
+        </div>
+    </form>
+</section>

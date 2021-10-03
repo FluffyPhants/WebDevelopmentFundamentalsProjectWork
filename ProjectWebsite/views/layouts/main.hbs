@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hello Bulma!</title>
+  <script src="https://kit.fontawesome.com/4ecead577c.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -17,12 +18,7 @@
         <img src="/icons/taco_1f32e.png" alt="image of a taco">
       </a>
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-        data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
+      <label class="button-toggle-menu is-hidden-desktop" for="toggle-menu">=</label>
     </div>
 
     <div id="navbarBasicExample" class="navbar-menu">
@@ -30,15 +26,15 @@
 
       </div>
       <div class="navbar-end">
-        <a href="/" class="navbar-item is-tab is-active">
+        <a href="/" class="navbar-item is-tab {{#if homeTab}}is-active{{/if}}">
           Home
         </a>
 
-        <a href="/projects" class="navbar-item is-tab">
-          Project
+        <a href="/projects" class="navbar-item is-tab {{#if projectsTab}}is-active{{/if}}">
+          Projects
         </a>
 
-        <a href="/about" class="navbar-item is-tab">
+        <a href="/about" class="navbar-item is-tab {{#if aboutTab}}is-active{{/if}}">
           About
         </a>
 
@@ -49,6 +45,19 @@
       </div>
     </div>
   </nav>
+
+<input id="toggle-menu" type="checkbox" aria-label="menu" aria-expanded="false" class="is-hidden"></input>
+<aside class="menu is-hidden-desktop">
+  <p class="menu-label">
+    Pages
+  </p>
+  <ul class="menu-list">
+    <li><a href="/">Home</a></li>
+    <li><a href="/projects">Projects</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="#footer">Contact</a></li>
+  </ul>
+</aside>
 
   <main>
     {{{body}}}

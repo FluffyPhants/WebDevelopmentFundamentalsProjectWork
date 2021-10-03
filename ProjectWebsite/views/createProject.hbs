@@ -1,0 +1,40 @@
+<section class="section">
+    <form action="/projects/create" method="POST" enctype="multipart/form-data">
+        <div class="field">
+            <label class="label">Project Title</label>
+            <div class="control">
+                <input class="input" type="text" name="projectTitle" placeholder="Text input">
+            </div>
+        </div>
+
+        <div class="file is-boxed">
+            <label for="fileupload"> Select a image to upload</label>  
+            <input type="file" name="image1" value="fileupload" class="image-upload">
+        </div>
+
+        <div class="field">
+            <label class="label">image Description</label>
+            <div class="control">
+                <textarea class="textarea" rows="10" name="firstImageDescription" placeholder="Textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="file is-boxed">
+            <label for="fileupload"> Select a image to upload</label>  
+            <input type="file" name="image1" value="fileupload" class="image-upload">
+        </div>
+
+        <div class="field">
+            <label class="label">image Description</label>
+            <div class="control">
+                <textarea class="textarea" rows="10" name="secondImageDescription" placeholder="Textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="field has-text-centered">
+            <div class="control">
+                <input type="submit" value="Post Project" class="button is-link"></input>
+            </div>
+        </div>
+    </form>
+</section>

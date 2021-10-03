@@ -22,6 +22,73 @@
     <p class="title">AMA</p>
     <div class="columns">
         <div class="column">
+
+        {{#if hasDatabaseError}}
+            <p>Couldn't fetch the questions at the moment, try again later.</p>
+        {{else}}
+            {{#if questions.length}}
+                {{#each questions}}
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong>{{name}}</strong>
+                                    <br>
+                                    {{question}}
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                {{/each}}
+
+                {{else}}
+                    <p>No questions have been posted yet!</p>
+            {{/if}}
+        {{/if}}
+
+        <article class="media">
+            <figure class="media-left"></figure>
+        </article>
+    </div>
+  
+        <div class="column">
+
+            <form action="/about/post" method="POST">
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="name" placeholder="Text input">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Message</label>
+                    <div class="control">
+                        <textarea class="textarea" rows="10" name="question" placeholder="Textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                        <input type="submit" value="create" class="button is-link"></input>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+{{!-- <div class="column">
             <article class="media">
                 <div class="media-content">
                     <div class="content">
@@ -93,29 +160,4 @@
                     <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
                 </ul>
             </nav>
-        </div>
-
-        
-        <div class="column">
-            <div class="field">
-                <label class="label">Name</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Text input">
-                </div>
-            </div>
-
-            <div class="field">
-                <label class="label">Message</label>
-                <div class="control">
-                    <textarea class="textarea" rows="10" placeholder="Textarea"></textarea>
-                </div>
-            </div>
-
-            <div class="field is-grouped is-grouped-right">
-                <div class="control">
-                    <button class="button is-link">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        </div> --}}
