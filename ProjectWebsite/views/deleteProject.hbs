@@ -2,7 +2,7 @@
     <h1 class="project-delete-title">Are you sure you want to delete the project "<strong>{{project.projectName}}</strong>"</h1>
     <section class="columns">
         <section class="column has-text-centered">
-            <a href="http://localhost:8080/project/{{project.id}}/info" class="button is-link">Cancel</a>
+            <a href="http://localhost:8080/project/{{project.id}}" class="button is-link">Cancel</a>
         </section>
         <section class="column has-text-centered">
             <form action="/project/{{project.id}}/delete" method="post">

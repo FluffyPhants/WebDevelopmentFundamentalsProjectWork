@@ -157,3 +157,9 @@ hr {
 #toggle-menu:not(:checked) ~ aside.menu {
   display: none;
 }
+
+
+/*########################################## --Modal toggle for projectFeedback-- ###########################################*/
+#feedback-modal:target {
+  display: flex;
+}

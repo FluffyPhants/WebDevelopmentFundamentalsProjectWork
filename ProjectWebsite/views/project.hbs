@@ -1,8 +1,8 @@
-<div class="modal {{#if submitFeedback}}is-active{{/if}}">
+<div class="modal" id="feedback-modal">
   <div class="modal-background"></div>
   <div class="modal-content">
     <!-- Any other Bulma elements you want -->
-        <form action="/project/post" method="POST">
+        <form action="/project/{{project.id}}/postFeedback" method="POST">
                 <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
@@ -26,11 +26,11 @@
 
             </form>
   </div>
-  <a href="/project/{{project.id}}/info" class="modal-close is-large" aria-label="close"></a>
+  <a href="/project/{{project.id}}" class="modal-close is-large" aria-label="close"></a>
 </div>
 {{!-- ################################################################### --}}
 
-{{#if hasProjectDatabaseError}}
+{{#if dbError}}
 <p>Couldn't fetch the project at the moment, try again later.</p>
 {{else}}
 {{#if project}}
@@ -89,11 +89,11 @@
         <p id="feedback" class="title">Feedback</p>
     </div>
     <div class="column has-text-centered" id="feedback-submit-button">
-        <a href="/project/{{project.id}}/submitFeedback" class="button">Submit feedback</a>
+        <a href="/project/{{project.id}}#feedback-modal" class="button">Submit feedback</a>
     </div>
 </div>
 
-{{#if hasFeedbacksDatabaseError}}
+{{#if dbError}}
 <p>Couldn't fetch the feedback at the moment, try again later.</p>
 {{else}}
 {{#if feedbacks.length}}
@@ -104,7 +104,7 @@
             <p class="inline feedback-name">
                 <strong>{{name}}</strong>
             </p>
-                    <form action="/comment/{{id}}/delete" method="post" class="inline">
+                    <form action="/project/{{id}}/deleteFeedback" method="post" class="inline">
                         <input class="comment-delete-link"type="submit" value="Delete">
                     </form>
             <p class="feedback-content">
