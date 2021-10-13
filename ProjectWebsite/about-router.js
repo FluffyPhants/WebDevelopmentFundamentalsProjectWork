@@ -40,4 +40,17 @@ router.post('/post', function(req, res) {
     })
 })
 
+router.post('/deleteQuestion/:id', function(req, res) {
+    console.log("this")
+    // TODO: Check if the user is logged in, and only carry
+    // out the request if the user is.
+
+    const query = "DELETE FROM amaQuestions WHERE id = ?"
+    const values = [req.params.id]
+
+    db.run(query, values, function (error) {
+        res.redirect(req.headers.referer);
+    }) 
+})
+
 module.exports = router

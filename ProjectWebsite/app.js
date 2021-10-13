@@ -19,14 +19,14 @@ app.engine('hbs', expressHandlebars({
 db.run("PRAGMA foreign_keys = ON");
 
 //Routers ###################################################
-const projects = require('./projects.js')
-app.use('/projects', projects)
+const projectsrouter = require('./projects-router.js')
+app.use('/projects', projectsrouter)
 
-const project = require('./project.js')
-app.use('/project', project)
+const projectrouter = require('./project-router.js')
+app.use('/project', projectrouter)
 
-const about = require('./about.js')
-app.use('/about', about)
+const aboutrouter = require('./about-router.js')
+app.use('/about', aboutrouter)
 //###########################################################
 
 app.get('/', function (request, response) {

@@ -3,6 +3,22 @@ const router = express.Router()
 const sqlite3 = require('sqlite3')
 const db = new sqlite3.Database('sebastian.db')
 
+
+const multer = require('multer')
+const helpers = require('./helpers')
+
+//https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
+const storage = multer.diskStorage({
+    //define storage location for out images
+    destination: function(req, file, cb) {
+        cb(null, 'static/uploads/');
+    },
+    //add back date and fileextension to our image
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+})
+
 async function selectFromProjectsByID(id) {
     const query1 = "SELECT * FROM projects where id = ? LIMIT 1";
     return new Promise(function (resolve, reject) {
@@ -90,7 +106,62 @@ router.route('/:id/update')
         res.render('updateProject.hbs', model)
     })
     .post(function(req, res) {
+        const upload = multer({ storage: storage, fileFilter: helpers.imageFilter }).fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1}]);
+        upload(req, res, function(err) {
+            let img1 = true;
+            let img2 = true;
 
+            if (req.fileValidationError) {
+                return res.send(req.fileValidationError);
+            }
+            if (!req.files['image1']) {
+                img1 = false;
+            }
+            if (!req.files['image2']) {
+                img2 = false;
+            }
+            if (err instanceof multer.MulterError) {
+                return res.send(err);
+            }
+            else if (err) {
+                return res.send(err);
+            }
+            //add check to se if file has changed otherwise leave alone
+
+            let query;
+            let values;
+
+            if(img1) {
+                let firstImagePath = req.files['image1'][0].path
+                let firstImagePathCorrected = firstImagePath.replace('static', '')
+                if(img2) {
+                    let secondImagePath = req.files['image2'][0].path
+                    let secondImagePathCorrected = secondImagePath.replace('static', '')
+                    query = "UPDATE projects SET projectName = ?, description1 = ?, image1path = ?, description2 = ?, image2path = ? WHERE id = ?"
+                    values = [req.body['projectTitle'], req.body['firstImageDescription'], firstImagePathCorrected, req.body['secondImageDescription'], secondImagePathCorrected, req.params.id]
+                }
+                else {
+                    query = "UPDATE projects SET projectName = ?, description1 = ?, image1path = ?, description2 = ? WHERE id = ?"
+                    values = [req.body['projectTitle'], req.body['firstImageDescription'], firstImagePathCorrected, req.body['secondImageDescription'], req.params.id]
+                }
+            }
+            else{
+                if(img2){
+                    let secondImagePath = req.files['image2'][0].path
+                    let secondImagePathCorrected = secondImagePath.replace('static', '')
+                    query = "UPDATE projects SET projectName = ?, description1 = ?, description2 = ?, image2path = ? WHERE id = ?"
+                    values = [req.body['projectTitle'], req.body['firstImageDescription'], req.body['secondImageDescription'], secondImagePathCorrected, req.params.id]
+                }
+                else{
+                    query = "UPDATE projects SET projectName = ?, description1 = ?, description2 = ? WHERE id = ?"
+                    values = [req.body['projectTitle'], req.body['firstImageDescription'], req.body['secondImageDescription'], req.params.id]
+                }
+            }
+
+            db.run(query, values, function (error) {
+                res.redirect('/project/'+req.params.id);
+            })
+        })  
     })
 
 router.route('/:feedbackId/deleteFeedback')

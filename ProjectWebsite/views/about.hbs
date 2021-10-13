@@ -31,11 +31,14 @@
                     <article class="media">
                         <div class="media-content">
                             <div class="content">
-                                <p>
+                                 <p class="inline">
                                     <strong>{{name}}</strong>
-                                    <br>
-                                    {{question}}
-                                    <br>
+                                </p>
+                                <form action="/about/deleteQuestion/{{id}}" method="post" class="inline">
+                                    <input class="comment-delete-link"type="submit" value="Delete">
+                                </form>
+                                <p>
+                                        {{question}}
                                 </p>
                             </div>
                         </div>
