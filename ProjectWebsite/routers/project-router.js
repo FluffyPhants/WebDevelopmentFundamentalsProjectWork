@@ -1,11 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const sqlite3 = require('sqlite3')
-const db = new sqlite3.Database('sebastian.db')
 
+const db = require("../database.js")
 
 const multer = require('multer')
-const helpers = require('./helpers')
+const helpers = require('../helpers')
 
 //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
 const storage = multer.diskStorage({
@@ -19,36 +18,10 @@ const storage = multer.diskStorage({
     }
 })
 
-async function selectFromProjectsByID(id) {
-    const query1 = "SELECT * FROM projects where id = ? LIMIT 1";
-    return new Promise(function (resolve, reject) {
-            db.all(query1,[id], function (error, result) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result[0]);
-                }
-            });
-        });
-}
-
-async function selectProjectFeedbackFromProjectID(projectId) {
-    const query2 = "SELECT * FROM projectFeedback where projectId = ? ORDER BY id DESC";
-    return new Promise(function (resolve, reject) {
-            db.all(query2,[projectId], function (error, result) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-}
-
 router.param('id', async function(req, res, next, id) {
     try{
-        const project = await selectFromProjectsByID(id)
-        const feedbacks = await selectProjectFeedbackFromProjectID(id)
+        const project = await db.selectFromProjectsByID(id)
+        const feedbacks = await db.selectProjectFeedbackFromProjectID(id)
         req.project = project
         req.feedback = feedbacks
         req.DbError = false
@@ -87,12 +60,15 @@ router.route('/:id/delete')
     .post(function(req, res) {
         // TODO: Check if the user is logged in, and only carry
 	    // out the request if the user is.
+        const id = [req.project.id]
 
-        const query = "DELETE FROM projects WHERE id = ?"
-        const values = [req.project.id]
-
-        db.run(query, values, function (error) {
-            res.redirect('/projects');
+        db.deleteProjectById(id, function (error) {
+            if(error){
+                //TODO
+            }
+            else {
+                res.redirect('/projects');
+            }
         })
     })
 

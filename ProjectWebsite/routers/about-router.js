@@ -1,14 +1,14 @@
+const { response } = require('express')
 const express = require('express')
 const router = express.Router()
-const sqlite3 = require('sqlite3')
-const db = new sqlite3.Database('sebastian.db')
+const db = require("../database")
 
 router.get('/', function(req, res) {
     res.locals = {
         aboutTab: true
     }
 
-    db.all("SELECT * FROM amaQuestions ORDER BY id DESC", function (error, questions) {
+    db.selectAllAmaQuestions(function(error, questions) {
         if (error) {
             const model = {
                 hasDatabaseError: true,
@@ -32,24 +32,28 @@ router.post('/post', function(req, res) {
 
     // TODO: Add validation and display error messages.
 
-    const query = "INSERT INTO amaQuestions (name, question) VALUES (?, ?)"
-    const values = [name, question]
-
-    db.run(query, values, function (error) {
-        res.redirect('/about#AMA')
+    db.postAmaQuestion(name, question, function(error) {
+        if(error) {
+            //TODO
+        }
+        else {
+            response.redirect(req.headers.referer+"#AMA")
+        }
     })
 })
 
 router.post('/deleteQuestion/:id', function(req, res) {
-    console.log("this")
     // TODO: Check if the user is logged in, and only carry
     // out the request if the user is.
+    const id = [req.params.id]
 
-    const query = "DELETE FROM amaQuestions WHERE id = ?"
-    const values = [req.params.id]
-
-    db.run(query, values, function (error) {
-        res.redirect(req.headers.referer);
+    db.deleteAmaQuestionById(id, function(error){
+        if(error) {
+            //TODO
+        }
+        else {
+            response.redirect(req.headers.referer+"#AMA")
+        }
     }) 
 })
 

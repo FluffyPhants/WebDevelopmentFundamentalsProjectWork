@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
-const helpers = require('./helpers')
+const helpers = require('../helpers')
 const sqlite3 = require('sqlite3')
-const db = new sqlite3.Database('sebastian.db')
+const db = new sqlite3.Database('./sebastian.db')
 const path = require('path')
 
 //https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/

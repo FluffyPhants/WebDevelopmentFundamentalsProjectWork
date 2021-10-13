@@ -19,38 +19,18 @@ app.engine('hbs', expressHandlebars({
 db.run("PRAGMA foreign_keys = ON");
 
 //Routers ###################################################
-const projectsrouter = require('./projects-router.js')
+const homerouter = require("./routers/home-router.js")
+app.use("/", homerouter)
+
+const projectsrouter = require('./routers/projects-router.js')
 app.use('/projects', projectsrouter)
 
-const projectrouter = require('./project-router.js')
+const projectrouter = require('./routers/project-router.js')
 app.use('/project', projectrouter)
 
-const aboutrouter = require('./about-router.js')
+const aboutrouter = require('./routers/about-router.js')
 app.use('/about', aboutrouter)
 //###########################################################
-
-app.get('/', function (request, response) {
-    response.locals = {
-        homeTab: true
-    }
-
-    db.all("SELECT * FROM projects ORDER BY id DESC LIMIT 3", function (error, projects) {
-        if (error) {
-            const model = {
-                hasDatabaseError: true,
-                projects: []
-            }
-            response.render('home.hbs', model)
-        }
-        else {
-            const model = {
-                hasDatabaseError: false,
-                projects
-            }
-            response.render('home.hbs', model)
-        }
-    })
-})
 
 app.listen(8080)
 
