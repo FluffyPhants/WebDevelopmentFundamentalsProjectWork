@@ -1,60 +1,141 @@
-const { response } = require('express')
 const express = require('express')
 const router = express.Router()
-const db = require("../database")
+const db = require('../database')
 
-router.get('/', function(req, res) {
-    res.locals = {
+const vd = require('../validators.js')
+
+const csurf = require('csurf')
+
+router.get('/', csurf({}), function(req, res) {
+    res.locals.tab = {
         aboutTab: true
     }
 
+    let model = {}
+
     db.selectAllAmaQuestions(function(error, questions) {
-        if (error) {
-            const model = {
+        if(error){
+            model = {
                 hasDatabaseError: true,
-                questions: []
+                questions: [],
+                csrfToken: req.csrfToken()
             }
-            res.render('about.hbs', model)
         }
         else {
-            const model = {
+            model = {
                 hasDatabaseError: false,
-                questions
+                questions,
+                csrfToken: req.csrfToken()
             }
-            res.render('about.hbs', model)
         }
+        res.render('about.hbs', model)
     })
 })
 
-router.post('/post', function(req, res) {
+router.post('/post', csurf({}), function(req, res) {
     const name = req.body.name
     const question = req.body.question
 
-    // TODO: Add validation and display error messages.
+    const errors = vd.getValidationErrorsQuestion(name, question)
 
-    db.postAmaQuestion(name, question, function(error) {
-        if(error) {
-            //TODO
+    if(errors.length == 0) {
+        db.postAmaQuestion(name, question, function(error) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                res.redirect("/about#AMA")
+            }
+        })
+    }
+    else {
+        const model = {
+            errors,
+            name,
+            question,
+            csrfToken: req.csrfToken()
         }
-        else {
-            response.redirect(req.headers.referer+"#AMA")
-        }
+        res.render('createQuestion.hbs', model)
+    }
+})
+
+router.route('/:id/delete')
+    .get(vd.isLoggedIn,csurf({}), function(req, res) {
+        const id = req.params.id
+
+        db.selectAmaQuestionById(id, function(error, question) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                const model = {
+                    hasDatabaseError: false,
+                    question: question[0],
+                    csrfToken: req.csrfToken()
+                }
+                res.render('deleteQuestion.hbs', model)
+            }
+        })
     })
-})
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.id
+    
+        db.deleteAmaQuestionById(id, function(error){
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                res.redirect("/about#AMA")
+            }
+        }) 
+    })
 
-router.post('/deleteQuestion/:id', function(req, res) {
-    // TODO: Check if the user is logged in, and only carry
-    // out the request if the user is.
-    const id = [req.params.id]
+    router.route('/:id/update')
+    .get(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.id
 
-    db.deleteAmaQuestionById(id, function(error){
-        if(error) {
-            //TODO
-        }
-        else {
-            response.redirect(req.headers.referer+"#AMA")
-        }
-    }) 
-})
+        db.selectAmaQuestionById(id, function(error, question) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                const model = {
+                    hasDatabaseError: false,
+                    question: question[0],
+                    csrfToken: req.csrfToken()
+                }
+                res.render('updateQuestion.hbs', model)
+            }
+        })
+    })
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.id
+        const name = req.body.name
+        const question = req.body.question
+    
+        db.updateAmaQuestionById(name, question, id, function(error){
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                res.redirect("/about#AMA")
+            }
+        }) 
+    })
 
 module.exports = router

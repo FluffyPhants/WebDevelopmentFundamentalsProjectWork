@@ -27,23 +27,39 @@
             <p>Couldn't fetch the questions at the moment, try again later.</p>
         {{else}}
             {{#if questions.length}}
-                {{#each questions}}
+                {{#if session.isLoggedIn}}
+                    {{#each questions}}
                     <article class="media">
                         <div class="media-content">
                             <div class="content">
-                                 <p class="inline">
+                                <p class="inline">
                                     <strong>{{name}}</strong>
                                 </p>
-                                <form action="/about/deleteQuestion/{{id}}" method="post" class="inline">
-                                    <input class="comment-delete-link"type="submit" value="Delete">
-                                </form>
+                                <a href="/about/{{id}}/delete">Delete</a>
+                                <a href="/about/{{id}}/update">Update</a>
                                 <p>
                                         {{question}}
                                 </p>
                             </div>
                         </div>
                     </article>
-                {{/each}}
+                    {{/each}}
+                {{else}}
+                    {{#each questions}}
+                    <article class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                 <p class="inline">
+                                    <strong>{{name}}</strong>
+                                </p>
+                                <p>
+                                        {{question}}
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                    {{/each}}
+                {{/if}}
 
                 {{else}}
                     <p>No questions have been posted yet!</p>
@@ -58,6 +74,7 @@
         <div class="column">
 
             <form action="/about/post" method="POST">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
@@ -82,85 +99,3 @@
         </div>
     </div>
 </section>
-
-
-
-
-
-
-
-
-
-{{!-- <div class="column">
-            <article class="media">
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>Barbara Middleton</strong>
-                            <br>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec
-                            ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum.
-                            Nunc in tempus turpis.
-                            <br>
-                            <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
-                        </p>
-                    </div>
-
-                    <article class="media">
-                        <figure class="media-left">
-                        </figure>
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>Sean Brown</strong>
-                                    <br>
-                                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi
-                                    tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit
-                                    nisl a nulla sagittis, a lobortis leo feugiat.
-                                    <br>
-                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="media">
-                        <figure class="media-left">
-                        </figure>
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>Kayli Eunice </strong>
-                                    <br>
-                                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel. Maecenas varius
-                                    felis sit amet magna vestibulum euismod malesuada cursus libero. Vestibulum ante
-                                    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus
-                                    lacinia non nisl id feugiat.
-                                    <br>
-                                    <small>2 hrs <a>Reply</a></small>
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </article>
-
-            <article class="media">
-                <figure class="media-left">
-                </figure>
-            </article>
-
-            <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                <a class="pagination-previous">Previous</a>
-                <a class="pagination-next">Next page</a>
-                <ul class="pagination-list">
-                    <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-                    <li><span class="pagination-ellipsis">&hellip;</span></li>
-                    <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-                    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-                    <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-                    <li><span class="pagination-ellipsis">&hellip;</span></li>
-                    <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-                </ul>
-            </nav>
-        </div> --}}

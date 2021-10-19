@@ -26,15 +26,15 @@
 
       </div>
       <div class="navbar-end">
-        <a href="/" class="navbar-item is-tab {{#if homeTab}}is-active{{/if}}">
+        <a href="/" class="navbar-item is-tab {{#if tab.homeTab}}is-active{{/if}}">
           Home
         </a>
 
-        <a href="/projects" class="navbar-item is-tab {{#if projectsTab}}is-active{{/if}}">
+        <a href="/projects" class="navbar-item is-tab {{#if tab.projectsTab}}is-active{{/if}}">
           Projects
         </a>
 
-        <a href="/about" class="navbar-item is-tab {{#if aboutTab}}is-active{{/if}}">
+        <a href="/about" class="navbar-item is-tab {{#if tab.aboutTab}}is-active{{/if}}">
           About
         </a>
 
@@ -75,7 +75,11 @@
     </div>
     <div class="content has-text-centered">
       <p style="margin-bottom: 0;">Copyright ©2021 Sebastian Santamaria</p>
-      <a href="">login</a>
+      {{#if session.isLoggedIn}}
+        <a href="/login/logout">logout</a>
+      {{else}}
+        <a href="/login">login</a>
+      {{/if}}
     </div>
   </footer>
 </body>

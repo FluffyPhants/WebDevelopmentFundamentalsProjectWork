@@ -1,130 +1,139 @@
 <div class="modal" id="feedback-modal">
-  <div class="modal-background"></div>
-  <div class="modal-content">
+    <div class="modal-background"></div>
+    <div class="modal-content">
     <!-- Any other Bulma elements you want -->
         <form action="/project/{{project.id}}/postFeedback" method="POST">
-                <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                        <input name="id" value="{{project.id}}" hidden="true">
-                        <input class="input" type="text" name="name" placeholder="Text input">
-                    </div>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input name="projectId" value="{{project.id}}" hidden="true">
+                    <input class="input" type="text" name="name" placeholder="Text input">
                 </div>
+            </div>
 
-                <div class="field">
-                    <label class="label">Message</label>
-                    <div class="control">
-                        <textarea class="textarea" rows="10" name="feedback" placeholder="Textarea"></textarea>
-                    </div>
+            <div class="field">
+                <label class="label">Message</label>
+                <div class="control">
+                    <textarea class="textarea" rows="10" name="feedback" placeholder="Textarea"></textarea>
                 </div>
+            </div>
 
-                <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                        <input type="submit" value="create" class="button is-link"></input>
-                    </div>
+            <div class="field is-grouped is-grouped-right">
+                <div class="control">
+                    <input type="submit" value="create" class="button is-link"></input>
                 </div>
-
-            </form>
-  </div>
-  <a href="/project/{{project.id}}" class="modal-close is-large" aria-label="close"></a>
+            </div>
+        </form>
+    </div>
+    <a href="/project/{{project.id}}" class="modal-close is-large" aria-label="close"></a>
 </div>
 {{!-- ################################################################### --}}
 
-{{#if dbError}}
-<p>Couldn't fetch the project at the moment, try again later.</p>
-{{else}}
 {{#if project}}
-<section>
-    <p class="title project-title has-text-centered">{{project.projectName}}</p>
-</section>
-
-<section>
-    <div class="columns has-text-centered">
-        <div class="column">
-            {{!-- TODO add if statemt to check if project has a website --}}
-            <a href="" class="button is-link">Visit project</a>
-        </div>
-        <div class="column">
-            <a href="" class="button is-link">View Source Code</a>
-        </div>
-    </div>
-</section>
-
-<section class="">
-    <div class="columns">
-        <div class="column">
-            <img class="project-image" src="{{project.image1path}}" alt="Placeholder image">
-        </div>
-        <div class="column">
-            <div class="has-text-left">
-                <p class="subtitle">{{project.description1}}</p>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="">
-    <div class="columns">
-        <div class="column">
-            <div class="has-text-right">
-                <p class="subtitle">{{project.description2}}</p>
-            </div>
-        </div>
-        <div class="column">
-            <img class="project-image" src="{{project.image2path}}" alt="Placeholder image">
-        </div>
-    </div>
-    <section class="has-text-centered">
-        <a href="/project/{{project.id}}/delete" class="button is-danger">Delete Project</a>
+    <section>
+        <p class="title project-title has-text-centered">{{project.projectName}}</p>
     </section>
-</section>
 
-<hr>
+    <section>
+        <div class="columns has-text-centered">
+            <div class="column">
+                {{!-- TODO add if statemt to check if project has a website --}}
+                <a href="" class="button is-link">Visit project</a>
+            </div>
+            <div class="column">
+                <a href="" class="button is-link">View Source Code</a>
+            </div>
+        </div>
+    </section>
 
+    <section class="">
+        <div class="columns">
+            <div class="column">
+                <img class="project-image" src="{{project.image1path}}" alt="Placeholder image">
+            </div>
+            <div class="column">
+                <div class="has-text-left">
+                    <p class="subtitle">{{project.description1}}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="">
+        <div class="columns">
+            <div class="column">
+                <div class="has-text-right">
+                    <p class="subtitle">{{project.description2}}</p>
+                </div>
+            </div>
+            <div class="column">
+                <img class="project-image" src="{{project.image2path}}" alt="Placeholder image">
+            </div>
+        </div>
+        {{#if session.isLoggedIn}}
+            <section class="has-text-centered">
+                <a href="/project/{{project.id}}/delete" class="button is-danger">Delete Project</a>
+                <a href="/project/{{project.id}}/update" class="button is-info">Update Project</a>
+            </section>
+        {{/if}}
+    </section>
 
-<div class="columns">
-    <div class="column">
+    <hr>
 
-    </div>
-    <div class="column has-text-centered">
-        <p id="feedback" class="title">Feedback</p>
-    </div>
-    <div class="column has-text-centered" id="feedback-submit-button">
-        <a href="/project/{{project.id}}#feedback-modal" class="button">Submit feedback</a>
-    </div>
-</div>
+    <div class="columns">
+        <div class="column">
 
-{{#if dbError}}
-<p>Couldn't fetch the feedback at the moment, try again later.</p>
-{{else}}
-{{#if feedbacks.length}}
-{{#each feedbacks}}
-<article class="media">
-    <div class="media-content">
-        <div class="content">
-            <p class="inline feedback-name">
-                <strong>{{name}}</strong>
-            </p>
-            <form action="/project/{{id}}/deleteFeedback" method="post" class="inline">
-                <input class="comment-delete-link"type="submit" value="Delete">
-            </form>
-            <p class="feedback-content">
-                    {{feedback}}
-            </p>
+        </div>
+        <div class="column has-text-centered">
+            <p id="feedback" class="title">Feedback</p>
+        </div>
+        <div class="column has-text-centered" id="feedback-submit-button">
+            <a href="/project/{{project.id}}#feedback-modal" class="button">Submit feedback</a>
         </div>
     </div>
-</article>
-{{/each}}
 
-{{else}}
-<p>No questions have been posted yet!</p>
-{{/if}}
-{{/if}}
+    {{#if feedbacks.length}}
+        {{#if session.isLoggedIn}}
+            {{#each feedbacks}}
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <p class="inline feedback-name">
+                            <strong>{{name}}</strong>
+                        </p>
+                        <a href="/project/{{id}}/deleteFeedback">Delete</a>
+                        <a href="/project/{{id}}/updateFeedback">Update</a>
+                        <p class="feedback-content">
+                                {{feedback}}
+                        </p>
+                    </div>
+                </div>
+            </article>
+            {{/each}}
+        {{else}}
+            {{#each feedbacks}}
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <p class="inline feedback-name">
+                            <strong>{{name}}</strong>
+                        </p>
+                        <p class="feedback-content">
+                                {{feedback}}
+                        </p>
+                    </div>
+                </div>
+            </article>
+            {{/each}}
+        {{/if}}
+    {{else}}
+        <p>No questions have been posted yet!</p>
+    {{/if}}
 
 <article class="media">
     <figure class="media-left"></figure>
 </article>
 
 {{else}}
-<p>project does not exist!</p>
-{{/if}}
+    <p>project does not exist!</p>
 {{/if}}

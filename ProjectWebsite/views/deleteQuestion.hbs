@@ -1,0 +1,15 @@
+<section class="section has-text-centered">
+    <h1 class="project-delete-title">Are you sure you want to delete the question "<strong>{{question.question}}</strong>"</h1>
+    <section class="columns">
+        <section class="column has-text-centered">
+            <a href="http://localhost:8080/about#AMA" class="button is-link">Cancel</a>
+        </section>
+        <section class="column has-text-centered">
+            <form action="/about/{{question.id}}/delete" method="post">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <input class="button is-danger"type="submit" value="Delete">
+            </form>
+        </section>
+    
+    </section>
+</section>

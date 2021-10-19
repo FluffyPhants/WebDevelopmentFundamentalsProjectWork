@@ -1,0 +1,32 @@
+{{#if errors.length}}
+<p>Couldn't update feedback because:</p>
+<ul>
+    {{#each errors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+
+<form action="/project/{{feedback.id}}/updateFeedback" method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <input name="projectId" value="{{feedback.projectId}}" hidden="true">
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" placeholder="name" value="{{feedback.name}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Message</label>
+        <div class="control">
+            <textarea class="textarea" rows="7" name="feedback" placeholder="Textarea">{{feedback.feedback}}</textarea>
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <div class="control">
+            <input type="submit" value="Update" class="button is-link"></input>
+        </div>
+    </div>
+</form>

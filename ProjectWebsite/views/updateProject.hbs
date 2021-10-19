@@ -1,5 +1,15 @@
+{{#if errors.length}}
+<p>Couldn't create the project because:</p>
+<ul>
+    {{#each errors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+
 <section class="section">
     <form action="/project/{{project.id}}/update" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <div class="field">
             <label class="label">Project Title</label>
             <div class="control">

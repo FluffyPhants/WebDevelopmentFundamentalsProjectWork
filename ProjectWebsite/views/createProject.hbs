@@ -1,9 +1,19 @@
+{{#if errors.length}}
+<p>Couldn't create the project because:</p>
+<ul>
+    {{#each errors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+
 <section class="section">
     <form action="/projects/create" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <div class="field">
             <label class="label">Project Title</label>
             <div class="control">
-                <input class="input" type="text" name="projectTitle" placeholder="Text input">
+                <input class="input" type="text" name="projectTitle" placeholder="Text input" value="{{title}}">
             </div>
         </div>
 
@@ -15,7 +25,7 @@
         <div class="field">
             <label class="label">image Description</label>
             <div class="control">
-                <textarea class="textarea" rows="10" name="firstImageDescription" placeholder="Textarea"></textarea>
+                <textarea class="textarea" rows="10" name="firstImageDescription" placeholder="Textarea">{{desc1}}</textarea>
             </div>
         </div>
 
@@ -27,7 +37,7 @@
         <div class="field">
             <label class="label">image Description</label>
             <div class="control">
-                <textarea class="textarea" rows="10" name="secondImageDescription" placeholder="Textarea"></textarea>
+                <textarea class="textarea" rows="10" name="secondImageDescription" placeholder="Textarea">{{desc2}}</textarea>
             </div>
         </div>
 

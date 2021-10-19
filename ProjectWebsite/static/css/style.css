@@ -1,3 +1,8 @@
+.login-form {
+  min-height: 100vh;
+  margin-top: 30vh;
+}
+
 .footer {
   padding-bottom: 1rem;
 }

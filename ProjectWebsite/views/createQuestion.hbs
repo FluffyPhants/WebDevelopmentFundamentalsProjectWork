@@ -1,0 +1,31 @@
+{{#if errors.length}}
+<p>Couldn't create feedback because:</p>
+<ul>
+    {{#each errors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+
+<form action="/about/post" method="POST">
+<input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" placeholder="Text input" value="{{name}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Message</label>
+        <div class="control">
+            <textarea class="textarea" rows="10" name="question" placeholder="Textarea">{{question}}</textarea>
+        </div>
+    </div>
+
+    <div class="field is-grouped is-grouped-right">
+        <div class="control">
+            <input type="submit" value="create" class="button is-link"></input>
+        </div>
+    </div>
+</form>

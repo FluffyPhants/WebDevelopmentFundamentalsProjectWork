@@ -1,0 +1,22 @@
+<form action="/about/{{question.id}}/update" method="POST">
+<input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" placeholder="name" value="{{question.name}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Question</label>
+        <div class="control">
+            <textarea class="textarea" rows="7" name="question" placeholder="Textarea">{{question.question}}</textarea>
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <div class="control">
+            <input type="submit" value="Update" class="button is-link"></input>
+        </div>
+    </div>
+</form>

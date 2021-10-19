@@ -1,0 +1,15 @@
+<section class="section has-text-centered">
+    <h1 class="project-delete-title">Are you sure you want to delete the feedback "<strong>{{feedback.feedback}}</strong>"</h1>
+    <section class="columns">
+        <section class="column has-text-centered">
+            <a href="http://localhost:8080/project/{{feedback.projectId}}#feedback" class="button is-link">Cancel</a>
+        </section>
+        <section class="column has-text-centered">
+            <form action="/project/{{feedback.id}}/deleteFeedback" method="post">
+                <input name="projectId" value="{{feedback.projectId}}" hidden="true">
+                <input class="button is-danger"type="submit" value="Delete">
+            </form>
+        </section>
+    
+    </section>
+</section>

@@ -1,22 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-const db = require("../database.js")
+const mul = require('../multer.js')
 
-const multer = require('multer')
-const helpers = require('../helpers')
+const vd = require('../validators.js')
 
-//https://stackabuse.com/handling-file-uploads-in-node-js-with-expres-and-multer/
-const storage = multer.diskStorage({
-    //define storage location for out images
-    destination: function(req, file, cb) {
-        cb(null, 'static/uploads/');
-    },
-    //add back date and fileextension to our image
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-})
+const db = require('../database.js')
+
+const csurf = require('csurf')
 
 router.param('id', async function(req, res, next, id) {
     try{
@@ -24,47 +15,44 @@ router.param('id', async function(req, res, next, id) {
         const feedbacks = await db.selectProjectFeedbackFromProjectID(id)
         req.project = project
         req.feedback = feedbacks
-        req.DbError = false
     }
     catch{
-        req.project = [],
-        req.feedback = [],
-        req.DbError = true
+        const error = "Could not load project or feedback"
+        const model = {
+            error
+        }
+        res.render('databaseError.hbs', error)
     }
     next()
 })
 
 router.route('/:id')
-    .all(/*TODO add user validation*/)
-    .get(function(req, res) {
+    .get(csurf({}), function(req, res) {
         const model = {
             project: req.project,
             feedbacks: req.feedback,
-            dbError: req.dbError
+            csrfToken: req.csrfToken()
         }
         res.render('project.hbs', model)
     })
-    .post(function(req, res) {
-
-    })
 
 router.route('/:id/delete')
-    .all(/*TODO add user validation*/)
-    .get(function(req, res) {
+    .get(vd.isLoggedIn, csurf({}), function(req, res) {
             const model = {
-                dbError: req.dbError,
-                project: req.project
+                project: req.project,
+                csrfToken: req.csrfToken()
             }
             res.render('deleteProject.hbs', model)
     })
-    .post(function(req, res) {
-        // TODO: Check if the user is logged in, and only carry
-	    // out the request if the user is.
-        const id = [req.project.id]
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.project.id
 
         db.deleteProjectById(id, function (error) {
             if(error){
-                //TODO
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
             }
             else {
                 res.redirect('/projects');
@@ -73,124 +61,208 @@ router.route('/:id/delete')
     })
 
 router.route('/:id/update')
-    .all(/*TODO add user validation*/)
-    .get(function(req, res) {
+    .get(vd.isLoggedIn, csurf({}), function(req, res) {
         const model = {
             project: req.project,
-            dbError: req.dbError
+            csrfToken: req.csrfToken()
         }
         res.render('updateProject.hbs', model)
     })
-    .post(function(req, res) {
-        const upload = multer({ storage: storage, fileFilter: helpers.imageFilter }).fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1}]);
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+
+        const upload = mul.upload
+
         upload(req, res, function(err) {
-            let img1 = true;
-            let img2 = true;
 
-            if (req.fileValidationError) {
-                return res.send(req.fileValidationError);
-            }
+            const title = req.body['projectTitle']
+            const desc1 = req.body['firstImageDescription']
+            const desc2 = req.body['secondImageDescription']
+            let img1path
+            let img2path
+
+            let errors = []
+
             if (!req.files['image1']) {
-                img1 = false;
-            }
-            if (!req.files['image2']) {
-                img2 = false;
-            }
-            if (err instanceof multer.MulterError) {
-                return res.send(err);
-            }
-            else if (err) {
-                return res.send(err);
-            }
-            //add check to se if file has changed otherwise leave alone
-
-            let query;
-            let values;
-
-            if(img1) {
-                let firstImagePath = req.files['image1'][0].path
-                let firstImagePathCorrected = firstImagePath.replace('static', '')
-                if(img2) {
-                    let secondImagePath = req.files['image2'][0].path
-                    let secondImagePathCorrected = secondImagePath.replace('static', '')
-                    query = "UPDATE projects SET projectName = ?, description1 = ?, image1path = ?, description2 = ?, image2path = ? WHERE id = ?"
-                    values = [req.body['projectTitle'], req.body['firstImageDescription'], firstImagePathCorrected, req.body['secondImageDescription'], secondImagePathCorrected, req.params.id]
-                }
-                else {
-                    query = "UPDATE projects SET projectName = ?, description1 = ?, image1path = ?, description2 = ? WHERE id = ?"
-                    values = [req.body['projectTitle'], req.body['firstImageDescription'], firstImagePathCorrected, req.body['secondImageDescription'], req.params.id]
-                }
+                img1path = req.project.image1path
             }
             else{
-                if(img2){
-                    let secondImagePath = req.files['image2'][0].path
-                    let secondImagePathCorrected = secondImagePath.replace('static', '')
-                    query = "UPDATE projects SET projectName = ?, description1 = ?, description2 = ?, image2path = ? WHERE id = ?"
-                    values = [req.body['projectTitle'], req.body['firstImageDescription'], req.body['secondImageDescription'], secondImagePathCorrected, req.params.id]
-                }
-                else{
-                    query = "UPDATE projects SET projectName = ?, description1 = ?, description2 = ? WHERE id = ?"
-                    values = [req.body['projectTitle'], req.body['firstImageDescription'], req.body['secondImageDescription'], req.params.id]
-                }
+                img1path = req.files['image1'][0].path.replace('static', '')
+            }
+            if (!req.files['image2']) {
+                img2path = req.project.image2path
+            }
+            else {
+                img2path = (req.files['image2'][0].path).replace('static', '')
+            }
+            if (err) {
+                errors.push(err);
             }
 
-            db.run(query, values, function (error) {
-                res.redirect('/project/'+req.params.id);
-            })
-        })  
+            const verro = vd.getValidationErrorsProjectText(title, desc1, desc2)
+            for(const erro of verro) {
+                errors.push(erro)
+            }
+            
+            const verroimage = vd.validateImageFile(req.files['image1'], req.files['image2'])
+            for(const erro of verroimage) {
+                errors.push(erro)
+            }
+
+            if(errors.length == 0) {
+                db.updateProject(title, desc1, img1path, desc2, img2path, req.params.id, function(error) {
+                    if(error) {
+                        const model = {
+                            error
+                        }
+                        res.render('databaseError.hbs', error)
+                    }
+                    else {
+                        res.redirect('/project/' + req.params.id)
+                    }
+                })
+            }
+            else{
+                const model = {
+                    errors,
+                    project: {
+                        id: req.params.id,
+                        projectName: title,
+                        description1: desc1,
+                        image1path: img1path,
+                        description2: desc2,
+                        image2path: img2path
+                    },
+                    csrfToken: req.body._csrf
+                }
+                res.render('updateProject.hbs',model)
+            }
+        })
     })
 
 router.route('/:feedbackId/deleteFeedback')
-    .all(/*TODO add user validation*/)
-    .get(function(req, res) {
+    .get(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.feedbackId
+
+        db.selectProjectFeedbackById(id, function(error, feedback) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                const model = {
+                    feedback: feedback[0],
+                    csrfToken: req.csrfToken()
+                }
+                res.render('deleteFeedback.hbs', model)
+            }
+        })
     })
-    .post(function(req, res) {
-        // TODO: Check if the user is logged in, and only carry
-	    // out the request if the user is.
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.feedbackId
 
-        const query = "DELETE FROM projectFeedback WHERE id = ?"
-        const values = [req.params.feedbackId]
+        db.deleteProjectFeedbackById(id, function(error) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                res.redirect('/project/' + req.body.projectId +'#feedback')
+            }
+        })
+    })
 
-        db.run(query, values, function (error) {
-            res.redirect(req.headers.referer + '#feedback');
-        }) 
+
+router.route('/:feedbackId/updateFeedback')
+    .get(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.feedbackId
+
+        db.selectProjectFeedbackById(id, function(error, feedback) {
+            if(error) {
+                const model = {
+                    error
+                }
+                res.render('databaseError.hbs', error)
+            }
+            else {
+                const model = {
+                    feedback: feedback[0],
+                    csrfToken: req.csrfToken()
+                }
+                res.render('updateFeedback.hbs', model)
+            }
+        })
+    })
+    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+        const id = req.params.feedbackId
+        const name = req.body.name
+        const feedback = req.body.feedback
+        const projectId = req.body.projectId
+
+        const errors = vd.getValidationErrorsFeedback(name, feedback)
+
+        if(errors.length == 0) {
+            db.updateProjectFeedbackById(name, feedback, id, function(error) {
+                if(error) {
+                    const model = {
+                        error
+                    }
+                    res.render('databaseError.hbs', error)
+                }
+                else {
+                    res.redirect('/project/' + req.body.projectId +'#feedback')
+                }
+            })
+        }
+        else {
+            const model = {
+                errors,
+                feedback: {
+                    id,
+                    name,
+                    feedback,
+                    projectId
+                },
+                csrfToken: req.body._csrf
+            }
+            res.render('updateFeedback.hbs', model)
+        } 
     })
 
 router.route('/:id/postFeedback')
-    .all(/*TODO add user validation*/)
-    .get(function(req, res) {
-    })
-    .post(function(req, res) {
+    .post(csurf({}), function(req, res) {
         const name = req.body.name
         const feedback = req.body.feedback
-        const id = req.body.id
+        const projectId = req.body.projectId
 
-        //TODO: Add validation and display error messages.
-        //TODO: add validation to make sure project exists
+        const errors = vd.getValidationErrorsFeedback(name, feedback)
 
-        // db.all("SELECT * FROM projects where id = ?", [id], function (error, project) {
-        //     if (error) {
-        //         const model = {
-        //             hasDatabaseError: true,
-        //             questions: []
-        //         }
-        //         response.render('about.hbs', model)
-        //     }
-        //     else {
-        //         const model = {
-        //             hasDatabaseError: false,
-        //             questions
-        //         }
-        //         response.render('about.hbs', model)
-        //     }
-        // })
-
-        const query = "INSERT INTO projectFeedback (name, feedback, projectId) VALUES (?, ?, ?)"
-        const values = [name, feedback, id]
-
-        db.run(query, values, function (error) {
-            res.redirect('/project/'+id+'#feedback')
-        })
+        if(errors.length == 0) {
+            db.postProjectFeedback(name, feedback, projectId, function(error) {
+                if(error) {
+                    const model = {
+                        error
+                    }
+                    res.render('databaseError.hbs', error)
+                }
+                else {
+                    res.redirect('/project/'+projectId+'#feedback')
+                }
+            })
+        }
+        else {
+            const model = {
+                errors,
+                name,
+                feedback,
+                projectId,
+                csrfToken: req.body._csrf
+            }
+            res.render('createFeedback.hbs', model)
+        }
     })
     
 module.exports = router

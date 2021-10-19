@@ -3,7 +3,7 @@ const router = express.Router()
 const db = require("../database")
 
 router.get('/', function (req, res) {
-    res.locals = {
+    res.locals.tab = {
         homeTab: true
     }
 
