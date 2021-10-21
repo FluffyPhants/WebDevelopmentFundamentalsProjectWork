@@ -2,19 +2,20 @@
   <p class="title">Projects</p>
 </section>
 
+{{#if session.isLoggedIn}}
+  <section>
+    <div class="columns has-text-centered">
+      <a href="/projects/create" class="button is-link">create project</a>
+    </div>
+  </section>
+{{/if}}
+
 {{#if hasDatabaseError}}
 <p>Couldn't fetch the projects at the moment, try again later.</p>
 {{else}}
   {{#if projects.length}}
 
     <section class="projects">
-      {{#if session.isLoggedIn}}
-        <section>
-          <div class="columns has-text-centered">
-            <a href="/projects/create" class="button is-link">create project</a>
-          </div>
-        </section>
-      {{/if}}
       {{#each projects}}
           <section class="project">
             <div class="columns">

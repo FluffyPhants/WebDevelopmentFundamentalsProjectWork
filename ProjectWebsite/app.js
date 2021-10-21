@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3')
 const db = new sqlite3.Database('sebastian.db')
 const expressSession = require('express-session')
 
-//const cdb = require('./createDatabase')
+const cdb = require('./createDatabase')
 
 const connectSqlite3 = require('connect-sqlite3')
 const SQLiteStore = connectSqlite3(expressSession)
