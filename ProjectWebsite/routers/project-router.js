@@ -68,7 +68,7 @@ router.route('/:id/update')
         }
         res.render('updateProject.hbs', model)
     })
-    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+    .post(vd.isLoggedIn, function(req, res) {
 
         const upload = mul.upload
 

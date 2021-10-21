@@ -35,7 +35,7 @@ router.route('/create')
         }
         res.render('createProject.hbs', model)
     })
-    .post(vd.isLoggedIn, csurf({}), function(req, res) {
+    .post(vd.isLoggedIn, function(req, res) {
 
     const upload = mul.upload
 
