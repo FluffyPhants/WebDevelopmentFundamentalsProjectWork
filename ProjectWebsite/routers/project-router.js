@@ -73,6 +73,7 @@ router.route('/:id/update')
         const upload = mul.upload
 
         upload(req, res, function(err) {
+            csurf({})
 
             const title = req.body['projectTitle']
             const desc1 = req.body['firstImageDescription']

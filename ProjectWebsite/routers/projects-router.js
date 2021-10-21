@@ -37,6 +37,8 @@ router.route('/create')
     })
     .post(vd.isLoggedIn, function(req, res) {
 
+    csurf({})
+
     const upload = mul.upload
 
     upload(req, res, function(err) {

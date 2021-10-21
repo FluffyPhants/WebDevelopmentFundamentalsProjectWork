@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const vd = require('../validators.js')
+
 const csurf = require('csurf')
 
 const bcrypt = require('bcrypt');
@@ -24,13 +26,18 @@ router.route('/')
         const validUsername = await bcrypt.compare(username, ADMIN_USERNAME)
         const validPassword = await bcrypt.compare(password, ADMIN_PASSWORD)
 
-        if(validUsername && validPassword){
+        const errors = vd.validateLogin(validUsername, validPassword)
+
+        if(errors.length == 0){
             req.session.isLoggedIn = true
             // TODO: Do something better than redirecting to start page.
             res.redirect('/')
         }else{
-            // TODO: Display error message to the user.
-            res.render('login.hbs')
+            const model = {
+                errors,
+                csrfToken: req.body._csrf
+            }
+            res.render('login.hbs', model)
         }
     })
 

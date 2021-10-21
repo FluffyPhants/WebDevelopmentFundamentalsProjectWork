@@ -4,6 +4,13 @@
 
     </section>
     <section class="column">
+        {{#if errors.length}}
+            <ul>
+                {{#each errors}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
         <form action="/login" method="POST">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <div class="field">

@@ -55,6 +55,10 @@ const aboutrouter = require('./routers/about-router.js')
 app.use('/about', aboutrouter)
 //###########################################################
 
+app.get('*', function(req, res) {
+	res.render('urlError.hbs')
+})
+
 app.listen(8080)
 
 

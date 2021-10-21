@@ -110,6 +110,14 @@ exports.getValidationProjectImages = function(img1, img2) {
     return validation;
 }
 
+exports.validateLogin = function(username, password) {
+    const validation = []
+    if(!username || !password)
+        validation.push('wrong username or password')
+    
+    return validation
+}
+
 exports.isLoggedIn = function(req, res, next) {
     if(req.session.isLoggedIn)
         return next()
