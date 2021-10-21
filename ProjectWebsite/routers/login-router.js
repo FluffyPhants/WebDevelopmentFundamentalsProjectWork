@@ -34,7 +34,7 @@ router.route('/')
         }
     })
 
-router.get('/logout', function(req, res) {
+router.post('/logout', function(req, res) {
     req.session.isLoggedIn = false
     res.redirect('/')
 })

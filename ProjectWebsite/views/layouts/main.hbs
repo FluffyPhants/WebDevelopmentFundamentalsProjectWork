@@ -76,9 +76,11 @@
     <div class="content has-text-centered">
       <p style="margin-bottom: 0;">Copyright ©2021 Sebastian Santamaria</p>
       {{#if session.isLoggedIn}}
-        <a href="/login/logout">logout</a>
+      <form action="/login/logout" method="POST">
+            <input type="submit" value="logout" class="button is-link"></input>
+      </form>
       {{else}}
-        <a href="/login">login</a>
+        <a href="/login" class="button is-link">login</a>
       {{/if}}
     </div>
   </footer>
