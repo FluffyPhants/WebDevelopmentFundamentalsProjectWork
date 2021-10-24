@@ -1,11 +1,8 @@
 const express = require('express')
 const router = express.Router()
-
 const vd = require('../validators.js')
-
 const csurf = require('csurf')
-
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 
 const ADMIN_USERNAME = '$2b$10$QBH.2P2KhWMa4TvcNCtghesFPdSKhp4Xwm4LmtzB5FoRUrM4gZhxO'
 const ADMIN_PASSWORD = '$2b$10$We21npbWq5jcp2DFc0Gn8uPIFPQvUGPBOoN3n5VXXwZZnfuzusTNW'

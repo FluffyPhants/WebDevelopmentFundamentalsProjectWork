@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../database')
-
 const vd = require('../validators.js')
-
 const csurf = require('csurf')
 
 router.get('/', csurf({}), function(req, res) {

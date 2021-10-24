@@ -153,7 +153,7 @@ const upload = multer({ storage: storage}).fields([{ name: 'image1', maxCount: 1
 
 exports.uploadProject = function(title, desc1, img1path, desc2, img2path, callback) {
 
-        const query = "INSERT INTO projects (projectName, description1, image1path, description2, image2path) VALUES (?, ?, ?, ?, ?)"
+        const query = "INSERT INTO projects (title, description1, image1path, description2, image2path) VALUES (?, ?, ?, ?, ?)"
         const values = [title, desc1, img1path, desc2, img2path]
 
         db.run(query, values, function (error) {
@@ -163,7 +163,7 @@ exports.uploadProject = function(title, desc1, img1path, desc2, img2path, callba
 
 exports.updateProject = function(title, desc1, img1path, desc2, img2path, id, callback) {
 
-    query = "UPDATE projects SET projectName = ?, description1 = ?, image1path = ?, description2 = ?, image2path = ? WHERE id = ?"
+    query = "UPDATE projects SET title = ?, description1 = ?, image1path = ?, description2 = ?, image2path = ? WHERE id = ?"
     values = [title, desc1, img1path, desc2, img2path, id]
         
     db.run(query, values, function (error) {

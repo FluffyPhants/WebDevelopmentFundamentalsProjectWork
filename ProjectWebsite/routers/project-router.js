@@ -1,12 +1,8 @@
 const express = require('express')
 const router = express.Router()
-
 const mul = require('../multer.js')
-
 const vd = require('../validators.js')
-
 const db = require('../database.js')
-
 const csurf = require('csurf')
 
 router.param('id', async function(req, res, next, id) {
@@ -52,7 +48,7 @@ router.route('/:id/delete')
                 const model = {
                     error
                 }
-                res.render('databaseError.hbs', error)
+                res.render('databaseError.hbs', model)
             }
             else {
                 res.redirect('/projects');
@@ -127,7 +123,7 @@ router.route('/:id/update')
                     errors,
                     project: {
                         id: req.params.id,
-                        projectName: title,
+                        title: title,
                         description1: desc1,
                         image1path: img1path,
                         description2: desc2,

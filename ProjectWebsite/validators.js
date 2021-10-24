@@ -2,7 +2,7 @@ const MIN_NAME_LENGHT = 5;
 const MAX_NAME_LENGHT = 25;
 
 const MIN_FEEDBACK_LENGHT = 10;
-const MAX_FEEDBACK_LENGHT = 100;
+const MAX_FEEDBACK_LENGHT = 200;
 
 const MIN_QUESTION_LENGHT = 10;
 const MAX_QUESTION_LENGHT = 100;
@@ -11,7 +11,7 @@ const MIN_TITLE_LENGHT = 5;
 const MAX_TITLE_LENGHT = 30;
 
 const MIN_DESCRIPTION_LENGHT = 10;
-const MAX_DESCRIPTION_LENGHT = 100;
+const MAX_DESCRIPTION_LENGHT = 600;
 
 exports.getValidationErrorsFeedback = function(name, feedback) {
     const validationErrors = []
